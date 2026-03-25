@@ -1,0 +1,34 @@
+{
+  "name": "budgball-backend",
+  "version": "1.0.0",
+  "description": "Budg'Ball backend API with Firebase support",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "check": "node --check src/server.js",
+    "test": "mocha \"test/**/*.test.js\" --reporter spec"
+  },
+  "keywords": [
+    "budgball",
+    "express",
+    "firebase",
+    "react-api"
+  ],
+  "author": "Budg'Ball Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "firebase-admin": "^12.7.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "chai": "^5.1.2",
+    "mocha": "^10.7.3",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  }
+}
