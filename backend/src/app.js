@@ -11,6 +11,7 @@ import expensesRoutes from "./routes/expenses.js";
 import friendsRoutes from "./routes/friends.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import secureRoutes from "./routes/secure.js";
+import subscriptionsRoutes from "./routes/subscriptions.js";
 
 // Central app wiring: middleware first, then public routes, then protected routes.
 const app = express();
@@ -33,6 +34,7 @@ app.use("/api/users", usersRoutes);
 app.use("/api/goals", goalsRoutes);
 app.use("/api/budgets", budgetsRoutes);
 app.use("/api/expenses", expensesRoutes);
+app.use("/api/subscriptions", subscriptionsRoutes);
 app.use("/api/friends", friendsRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/secure", secureRoutes);

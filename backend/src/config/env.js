@@ -22,11 +22,22 @@ if (!useMemoryDb) {
   }
 }
 
+// CORS: allow Vite (5173) and Create React App (3000) by default when unset.
+const corsOriginsRaw =
+  process.env.FRONTEND_ORIGINS ||
+  process.env.FRONTEND_ORIGIN ||
+  "http://localhost:5173,http://localhost:3000";
+const frontendOrigins = corsOriginsRaw
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
 export const env = {
   // Keep defaults friendly for local development.
   port: Number(process.env.PORT || 4000),
   nodeEnv: process.env.NODE_ENV || "development",
-  frontendOrigin: process.env.FRONTEND_ORIGIN || "http://localhost:3000",
+  /** @type {string | string[]} Single origin or list for cors() */
+  frontendOrigin: frontendOrigins.length === 1 ? frontendOrigins[0] : frontendOrigins,
   allowDevAuth: process.env.ALLOW_DEV_AUTH === "true",
   useMemoryDb,
   firebaseProjectId: process.env.FIREBASE_PROJECT_ID || "",

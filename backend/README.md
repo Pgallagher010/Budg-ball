@@ -60,6 +60,12 @@ Use:
 - Prod: `npm start`
 - Test: `npm test`
 
+### Simple test UI (Vite + React)
+
+The repo includes `../frontend/` — a minimal GUI that proxies `/api` and `/health` to this server.
+By default the backend allows CORS from **http://localhost:5173** and **http://localhost:3000**
+(see `FRONTEND_ORIGINS` in `.env.example`).
+
 ## Response format
 
 All endpoints return a stable envelope suitable for React state handling:
@@ -76,6 +82,7 @@ All endpoints return a stable envelope suitable for React state handling:
 - `GET/POST/PATCH /api/goals` and `POST /api/goals/:goalId/complete`
 - `GET/POST /api/budgets`
 - `GET/POST /api/expenses`
+- `GET/POST /api/subscriptions` (recurring items: name + monthly amount, stored on user profile)
 - `GET /api/dashboard/summary`
 - `GET /api/secure/ping` (auth check for secure sections in React)
 - `GET /api/friends/search?q=`

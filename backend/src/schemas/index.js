@@ -51,3 +51,14 @@ export const expenseSchema = z.object({
 export const friendRequestSchema = z.object({
   toUid: z.string().min(1),
 });
+
+export const subscriptionBulkSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        name: z.string().min(1).max(80),
+        monthlyAmount: z.number().positive(),
+      })
+    )
+    .max(50),
+});

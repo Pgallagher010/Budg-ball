@@ -308,6 +308,22 @@ async function listFriends(uid) {
   return ids.map((id) => memory.users.get(id)).filter(Boolean);
 }
 
+async function listSubscriptions(uid) {
+  const u = await getUser(uid);
+  return Array.isArray(u?.subscriptionItems) ? u.subscriptionItems : [];
+}
+
+async function replaceSubscriptions(uid, items) {
+  const normalized = items.map((it) => ({
+    id: it.id || randomId("sub"),
+    name: String(it.name || "").slice(0, 80),
+    monthlyAmount: Number(it.monthlyAmount),
+    createdAt: it.createdAt || nowIso(),
+  }));
+  await upsertUser(uid, { subscriptionItems: normalized });
+  return normalized;
+}
+
 async function buildMonthlySummary(uid, monthKey) {
   // Aggregate queries in parallel to keep endpoint latency predictable.
   const [expenses, budgets, goals, user] = await Promise.all([
@@ -343,6 +359,8 @@ async function buildMonthlySummary(uid, monthKey) {
 export const store = {
   getUser,
   upsertUser,
+  listSubscriptions,
+  replaceSubscriptions,
   searchUsers,
   listGoals,
   createGoal,
