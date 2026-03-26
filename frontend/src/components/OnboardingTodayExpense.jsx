@@ -47,6 +47,13 @@ export function OnboardingTodayExpense({
         }),
       })
       if (!res.ok || !res.body?.success) {
+        if (res.status === 401) {
+          setError(
+            'Unauthorized (401). For “Continue without Firebase”, start the backend in dev mode: set ALLOW_DEV_AUTH=true (or leave it unset in development) and restart the backend.'
+          )
+          setBusy(false)
+          return
+        }
         setError(
           res.body?.error?.message ||
             'Could not save expense. Is the backend running with ALLOW_DEV_AUTH=true?'

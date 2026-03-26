@@ -36,6 +36,12 @@ export function OnboardingSubscriptions({
         body: JSON.stringify({ items }),
       })
       if (!res.ok || !res.body?.success) {
+        if (res.status === 401) {
+          setError(
+            'Unauthorized (401). For “Continue without Firebase”, start the backend in dev mode: set ALLOW_DEV_AUTH=true (or leave it unset in development) and restart the backend.'
+          )
+          return
+        }
         setError(
           res.body?.error?.message ||
             'Could not save subscriptions. Is the backend running?'

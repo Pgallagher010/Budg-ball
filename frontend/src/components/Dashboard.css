@@ -24,6 +24,15 @@
   height: 160px;
 }
 
+.ballimal-avatar {
+  width: 160px;
+  height: 160px;
+}
+
+.ballimal-avatar.is-sad {
+  transform: translateY(2px);
+}
+
 .dash-header__bar {
   height: 10px;
   background: #8bc34a;
@@ -163,6 +172,12 @@
   margin: 0;
 }
 
+.dash-warning {
+  color: #b71c1c;
+  font-weight: 700;
+  margin-top: 0.35rem;
+}
+
 .muted {
   color: #757575;
   font-size: 0.75rem;
@@ -285,6 +300,49 @@
   color: #1565c0;
   font-weight: 700;
   cursor: pointer;
+}
+
+.dash-custom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.dash-custom-grid label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+  color: #546e7a;
+  gap: 0.25rem;
+}
+
+.dash-custom-grid label:last-child {
+  grid-column: 1 / -1;
+}
+
+.dash-custom-grid input,
+.dash-custom-grid select {
+  border: 1px solid #cfd8dc;
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.85rem;
+}
+
+.dash-save-prefs {
+  margin-top: 0.7rem;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+  background: #1565c0;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dash-save-prefs:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 .dash-refresh:disabled {

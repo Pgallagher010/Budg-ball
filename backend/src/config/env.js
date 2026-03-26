@@ -38,7 +38,15 @@ export const env = {
   nodeEnv: process.env.NODE_ENV || "development",
   /** @type {string | string[]} Single origin or list for cors() */
   frontendOrigin: frontendOrigins.length === 1 ? frontendOrigins[0] : frontendOrigins,
-  allowDevAuth: process.env.ALLOW_DEV_AUTH === "true",
+
+  // In development, default to allowing the x-dev-user-id header so the React demo flow works
+  // even if you haven't created a backend/.env file yet.
+  // For production-like setups, explicitly set ALLOW_DEV_AUTH=false.
+  allowDevAuth:
+    process.env.ALLOW_DEV_AUTH === "true" ||
+    (process.env.ALLOW_DEV_AUTH !== "false" &&
+      (process.env.NODE_ENV || "development") === "development"),
+
   useMemoryDb,
   firebaseProjectId: process.env.FIREBASE_PROJECT_ID || "",
   firebaseClientEmail: process.env.FIREBASE_CLIENT_EMAIL || "",

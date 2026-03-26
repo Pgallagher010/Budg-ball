@@ -13,7 +13,7 @@ import {
 } from 'recharts'
 import { apiFetch } from '../api/client.js'
 import { getFirebaseAuth } from '../firebase.js'
-import { BallimalCat } from './BallimalCat.jsx'
+import { BallimalAvatar } from './BallimalAvatar.jsx'
 import './Dashboard.css'
 
 const DONUT_COLORS = ['#26c6da', '#ff9800', '#ffeb3b', '#e91e63', '#7e57c2', '#78909c']
@@ -101,6 +101,12 @@ export function Dashboard({
   const [summary, setSummary] = useState(null)
   const [budgetPayload, setBudgetPayload] = useState(null)
   const [expensesPayload, setExpensesPayload] = useState(null)
+  const [preferences, setPreferences] = useState({
+    species: 'cat',
+    colorTheme: 'sand',
+    weeklyBudget: 120,
+  })
+  const [prefSaving, setPrefSaving] = useState(false)
   const [loading, setLoading] = useState(true)
   const [err, setErr] = useState('')
 
@@ -138,6 +144,12 @@ export function Dashboard({
       if (sum.ok && sum.body?.success) setSummary(sum.body.data)
       if (bud.ok && bud.body?.success) setBudgetPayload(bud.body.data)
       if (exp.ok && exp.body?.success) setExpensesPayload(exp.body.data)
+      if (me.ok && me.body?.success && me.body.data?.preferences) {
+        setPreferences((p) => ({
+          ...p,
+          ...me.body.data.preferences,
+        }))
+      }
 
       if (!sum.ok) {
         const hint =
@@ -182,11 +194,21 @@ export function Dashboard({
   const totalUsed = budgetPayload?.totalUsed ?? 0
   const remaining = budgetPayload?.remainingBudget ?? totalLimit - totalUsed
 
-  const eurBalance =
-    summary?.remainingBudget ?? remaining ?? 1243.62
-  const instantHint = summary?.totalBudget
-    ? `Available to save after budgets (${formatEuro(summary.remainingBudget ?? 0)} this month)`
-    : 'Available to pay out (demo values if API empty)'
+  const spentThisWeek = useMemo(() => {
+    const expenses = expensesPayload?.expenses || []
+    if (!expenses.length) return 0
+    const today = new Date()
+    const weekAgo = new Date(today)
+    weekAgo.setDate(today.getDate() - 6) // inclusive 7 days window: today + previous 6 days
+    const startIso = weekAgo.toISOString().slice(0, 10)
+    const endIso = today.toISOString().slice(0, 10)
+    return expenses.reduce((sum, e) => {
+      const d = e.date?.slice(0, 10)
+      if (!d) return sum
+      return d >= startIso && d <= endIso ? sum + e.amount : sum
+    }, 0)
+  }, [expensesPayload])
+  const weeklyBudgetOver = preferences.weeklyBudget > 0 && spentThisWeek > preferences.weeklyBudget
 
   const todaySpent = expensesPayload?.expenses?.reduce((s, e) => {
     const d = e.date?.slice(0, 10)
@@ -201,6 +223,30 @@ export function Dashboard({
     onSignedOut()
   }
 
+  const savePreferences = async () => {
+    setPrefSaving(true)
+    try {
+      const auth = { authMode, idToken, devUserId }
+      const payload = {
+        species: preferences.species,
+        colorTheme: preferences.colorTheme,
+        weeklyBudget: Number(preferences.weeklyBudget) || 0,
+      }
+      const res = await apiFetch('/api/users/me/preferences', {
+        ...auth,
+        method: 'PATCH',
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok || !res.body?.success) {
+        setErr(res.body?.error?.message || 'Could not save BudgBall customisation.')
+      }
+    } catch (e) {
+      setErr(String(e.message || e))
+    } finally {
+      setPrefSaving(false)
+    }
+  }
+
   const dateLabel = new Date().toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'short',
@@ -211,7 +257,11 @@ export function Dashboard({
     <div className="dashboard">
       <header className="dash-header">
         <div className="dash-header__mascot">
-          <BallimalCat />
+          <BallimalAvatar
+            species={preferences.species}
+            colorTheme={preferences.colorTheme}
+            sad={weeklyBudgetOver}
+          />
         </div>
         <div className="dash-header__bar" />
       </header>
@@ -261,13 +311,18 @@ export function Dashboard({
         <div className="dash-grid-2">
           <section className="dash-card">
             <div className="dash-card__title-row">
-              <h2 className="dash-card__title">EUR balance</h2>
+              <h2 className="dash-card__title">Spent this week</h2>
               <a className="dash-link" href="#top">
                 View
               </a>
             </div>
-            <div className="dash-huge">{formatEuro(eurBalance)}</div>
-            <p className="dash-sub muted">{instantHint}</p>
+            <div className="dash-huge">{formatEuro(spentThisWeek || 0)}</div>
+            <p className="dash-sub muted">
+              Budget: {formatEuro(preferences.weeklyBudget || 0)} · Last 7 days (including today)
+            </p>
+            {weeklyBudgetOver && (
+              <p className="dash-sub dash-warning">Over weekly budget — your BudgBall is sad.</p>
+            )}
           </section>
 
           <section className="dash-card dash-card--chart">
@@ -296,6 +351,55 @@ export function Dashboard({
             </div>
           </section>
         </div>
+
+        <section className="dash-card">
+          <div className="dash-card__title-row">
+            <h2 className="dash-card__title">BudgBall customisation</h2>
+          </div>
+          <div className="dash-custom-grid">
+            <label>
+              Animal
+              <select
+                value={preferences.species}
+                onChange={(e) => setPreferences((p) => ({ ...p, species: e.target.value }))}
+              >
+                <option value="cat">Cat</option>
+                <option value="fox">Fox</option>
+                <option value="panda">Panda</option>
+                <option value="monkey">Monkey</option>
+              </select>
+            </label>
+            <label>
+              Colour
+              <select
+                value={preferences.colorTheme}
+                onChange={(e) => setPreferences((p) => ({ ...p, colorTheme: e.target.value }))}
+              >
+                <option value="sand">Sand</option>
+                <option value="orange">Orange</option>
+                <option value="pink">Pink</option>
+                <option value="mint">Mint</option>
+                <option value="lavender">Lavender</option>
+                <option value="slate">Slate</option>
+              </select>
+            </label>
+            <label>
+              Weekly budget (€)
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={preferences.weeklyBudget}
+                onChange={(e) =>
+                  setPreferences((p) => ({ ...p, weeklyBudget: Number(e.target.value) }))
+                }
+              />
+            </label>
+          </div>
+          <button type="button" className="dash-save-prefs" onClick={savePreferences} disabled={prefSaving}>
+            {prefSaving ? 'Saving...' : 'Save customisation'}
+          </button>
+        </section>
 
         <section className="dash-card">
           <div className="dash-card__title-row">

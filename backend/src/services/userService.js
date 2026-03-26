@@ -12,3 +12,13 @@ export async function upsertMyProfile(uid, payload) {
     displayName: payload.displayName,
   });
 }
+
+export async function updateMyPreferences(uid, payload) {
+  return store.upsertUser(uid, {
+    preferences: {
+      species: payload.species,
+      colorTheme: payload.colorTheme,
+      weeklyBudget: payload.weeklyBudget,
+    },
+  });
+}

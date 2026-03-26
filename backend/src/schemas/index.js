@@ -62,3 +62,9 @@ export const subscriptionBulkSchema = z.object({
     )
     .max(50),
 });
+
+export const userPreferencesSchema = z.object({
+  species: z.enum(["cat", "fox", "panda", "monkey"]),
+  colorTheme: z.enum(["sand", "orange", "pink", "mint", "lavender", "slate"]),
+  weeklyBudget: z.number().nonnegative(),
+});
