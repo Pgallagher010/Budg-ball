@@ -1,0 +1,208 @@
+.onboarding {
+  min-height: 100svh;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 2rem;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #e8f4fc 0%, #4a90d9 35%);
+}
+
+.onboarding__top {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.onboarding__title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0d47a1;
+}
+
+.onboarding__subtitle {
+  margin: 0.4rem 0 0;
+  font-size: 0.88rem;
+  color: #37474f;
+  line-height: 1.4;
+}
+
+.onboarding__card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem 0.9rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  text-align: left;
+}
+
+.onboarding__card h3 {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.onboarding label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #455a64;
+  margin-bottom: 0.65rem;
+}
+
+.onboarding input,
+.onboarding select,
+.onboarding textarea {
+  width: 100%;
+  margin-top: 0.3rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #cfd8dc;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.onboarding textarea {
+  min-height: 4rem;
+  resize: vertical;
+}
+
+.onboarding__row {
+  display: grid;
+  grid-template-columns: 1fr 100px 36px;
+  gap: 0.5rem;
+  align-items: end;
+  margin-bottom: 0.5rem;
+}
+
+.onboarding__row--head {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #78909c;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.25rem;
+}
+
+.onboarding__remove {
+  border: none;
+  background: #ffebee;
+  color: #c62828;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  height: 38px;
+}
+
+.onboarding__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.onboarding__btn {
+  border: none;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.onboarding__btn--primary {
+  background: #1976d2;
+  color: #fff;
+}
+
+.onboarding__btn--primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.onboarding__btn--ghost {
+  background: transparent;
+  color: #1565c0;
+  text-decoration: underline;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.onboarding__error {
+  color: #c62828;
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem;
+}
+
+.onboarding__hint {
+  font-size: 0.75rem;
+  color: #78909c;
+  margin: 0.5rem 0 0;
+  line-height: 1.35;
+}
+
+@media (min-width: 700px) and (max-width: 1023px) {
+  .onboarding {
+    max-width: 860px;
+    padding: 1.5rem;
+    border-radius: 16px;
+    margin: 1rem auto;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .onboarding__card {
+    padding: 1.1rem;
+  }
+
+  .onboarding__actions {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .onboarding__btn {
+    width: auto;
+    min-width: 180px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .onboarding {
+    max-width: 1080px;
+    padding: 1.5rem;
+    border-radius: 18px;
+    margin: 1.2rem auto;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.22);
+  }
+
+  .onboarding__top {
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+
+  .onboarding__title {
+    font-size: 1.6rem;
+  }
+
+  .onboarding__subtitle {
+    max-width: 62ch;
+  }
+
+  .onboarding__card {
+    padding: 1.2rem;
+  }
+
+  .onboarding__row {
+    grid-template-columns: 1fr 140px 42px;
+  }
+
+  .onboarding__actions {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .onboarding__btn {
+    width: auto;
+    min-width: 220px;
+  }
+}
