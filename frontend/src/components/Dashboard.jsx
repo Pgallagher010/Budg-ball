@@ -291,9 +291,12 @@ export function Dashboard({
   const todayOther = 0
 
   const handleSignOut = async () => {
-    const auth = getFirebaseAuth()
-    if (auth) await signOut(auth)
-    onSignedOut()
+    try {
+      const auth = getFirebaseAuth()
+      if (auth) await signOut(auth)
+    } finally {
+      onSignedOut()
+    }
   }
 
   const savePreferences = async () => {
